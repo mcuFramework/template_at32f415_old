@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\ref\mcuf\src\main;.\ref\core_arterytek_at32f415\src\main;.\ref\bsp_arterytek_at32f415\src\main;.\src\main;.\src\resource</IncludePath>
+              <IncludePath>.\ref\mcuf\src\main;.\ref\core_arterytek_at32f415\src\main;.\ref\bsp_arterytek_at32f415\src\main;.\ref\driver\src\main;.\src\main;.\src\resource</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -383,24 +383,54 @@
           <GroupName>main</GroupName>
           <Files>
             <File>
-              <FileName>Entry.cpp</FileName>
+              <FileName>Main.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\main\Entry.cpp</FilePath>
+              <FilePath>.\src\main\Main.cpp</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>main/start</GroupName>
+          <GroupName>main\start</GroupName>
           <Files>
             <File>
-              <FileName>Main.cpp</FileName>
+              <FileName>Entry.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\main\start\Main.cpp</FilePath>
+              <FilePath>.\src\main\start\Entry.cpp</FilePath>
             </File>
             <File>
-              <FileName>Main.h</FileName>
+              <FileName>Entry.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\main\start\Main.h</FilePath>
+              <FilePath>.\src\main\start\Entry.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>main\tool</GroupName>
+          <Files>
+            <File>
+              <FileName>BoardPeriph.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\main\tool\BoardPeriph.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BoardPeriph.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\main\tool\BoardPeriph.h</FilePath>
+            </File>
+            <File>
+              <FileName>Console.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\main\tool\Console.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Console.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\main\tool\Console.h</FilePath>
+            </File>
+            <File>
+              <FileName>package-info.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\main\tool\package-info.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -461,6 +491,11 @@
               <FileName>mcuf_m4.lib</FileName>
               <FileType>4</FileType>
               <FilePath>.\ref\mcuf\target\mcuf_m4.lib</FilePath>
+            </File>
+            <File>
+              <FileName>driver_m4.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>.\ref\driver\target\driver_m4.lib</FilePath>
             </File>
           </Files>
         </Group>

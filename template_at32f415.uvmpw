@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<ProjectWorkspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_mpw.xsd">
+
+  <SchemaVersion>1.0</SchemaVersion>
+
+  <Header>### uVision Project, (C) Keil Software</Header>
+
+  <WorkspaceName>WorkSpace</WorkspaceName>
+
+  <project>
+    <PathAndName>.\template_at32f415.uvprojx</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+  </project>
+
+  <project>
+    <PathAndName>.\ref\mcuf\mcuf.uvprojx</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\ref\core_arterytek_at32f415\core_arterytek_at32f415.uvprojx</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\ref\bsp_arterytek_at32f415\bsp_arterytek_at32f415.uvprojx</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\ref\driver\driver.uvprojx</PathAndName>
+  </project>
+
+</ProjectWorkspace>

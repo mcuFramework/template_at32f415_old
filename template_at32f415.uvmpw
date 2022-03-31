@@ -27,7 +27,6 @@
 
   <project>
     <PathAndName>.\ref\driver\driver.uvprojx</PathAndName>
-    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>

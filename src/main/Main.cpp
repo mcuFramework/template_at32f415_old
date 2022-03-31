@@ -23,6 +23,7 @@
  
 //-----------------------------------------------------------------------------------------
 using namespace mcuf::lang;
+using namespace mcuf::util;
 using namespace mcuf::io;
  
 //-----------------------------------------------------------------------------------------
@@ -40,13 +41,29 @@ using driver::ams::TCS3472;
 /* ****************************************************************************************
  * Extern
  */
- 
+
+
  
 /* ****************************************************************************************
  * Variable
  */
 BoardPeriph* board;
 Console* console;
+TimerTask* t[4];
+
+class Temp extends TimerTask{
+  private:
+    uint8_t ch;
+  
+  public:
+    Temp(uint8_t numb){
+      ch = numb;
+    }
+  
+    void run(void) override{
+      board->led[ch].setToggle();
+    }
+};
 
 /* ****************************************************************************************
  * Method
@@ -57,7 +74,15 @@ Console* console;
  */
 void setup(start::Entry& entry){  
   board = new(entry.mStacker) BoardPeriph();
-  console = new(entry.mStacker) Console();
+  t[0] = new(entry.mStacker) Temp(1);
+  t[1] = new(entry.mStacker) Temp(2);
+  t[2] = new(entry.mStacker) Temp(3);
+  t[3] = new(entry.mStacker) Temp(4);
+  Timer::scheduleAtFixedRate(*t[0], 500);
+  Timer::scheduleAtFixedRate(*t[1], 250);
+  Timer::scheduleAtFixedRate(*t[2], 750);
+  Timer::scheduleAtFixedRate(*t[3], 1000);
+  //console = new(entry.mStacker) Console();
 }
 
 /**
@@ -68,7 +93,6 @@ void loop(start::Entry& entry){
   entry.delay(50);
   while(!board->wakeup.value());
   
-  console->out().println("hello");
   board->led[0].setToggle();
   entry.delay(500);
 }

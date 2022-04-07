@@ -28,16 +28,17 @@
 
 //-----------------------------------------------------------------------------------------
 using start::Entry;
-
-static Entry entry = 1024;
+using mcuf::lang::Memory;
+using mcuf::lang::Pointer;
+using mcuf::util::MemoryPool;
 
 extern void setup(start::Entry& entry);
 extern void loop(start::Entry& entry);
 
 
 extern "C" int main(void){
-  core::arterytek::at32f415::Core::setSystemCoreClock(144);
-  mcuf::lang::System::start(entry);
+  arterytek::at32f415::Core::setSystemCoreClock(144);
+  mcuf::lang::System::start(*new Entry(1024));
 }
 
 /* ****************************************************************************************
@@ -51,8 +52,7 @@ extern "C" int main(void){
 /**
  *
  */
-Entry::Entry(uint32_t stackSize) construct Thread(Memory(&this->mMemory, stackSize)),
-  mStacker(Memory(&this->mMemory[stackSize/8], sizeof(this->mMemory) - stackSize)){
+Entry::Entry(uint32_t stackSize) construct Thread(stackSize){
 }
 
 /* ****************************************************************************************

@@ -27,16 +27,15 @@ using namespace mcuf::util;
 using namespace mcuf::io;
  
 //-----------------------------------------------------------------------------------------
-using core::arterytek::at32f415::Core;
-using core::arterytek::at32f415::CoreIomux;
-using core::arterytek::at32f415::general::pin::CoreGeneralPin;
-using core::arterytek::at32f415::serial::bus::CoreSerialBus;
-using core::arterytek::at32f415::serial::bus::CoreSerialBusReg;
+using arterytek::at32f415::Core;
+using arterytek::at32f415::CoreIomux;
+using arterytek::at32f415::general::CoreGeneralPin;
+using arterytek::at32f415::serial::CoreSerialBus;
+using arterytek::at32f415::serial::CoreSerialBusReg;
 
-using mcuf::hal::general::pin::GeneralPin;
+using hal::general::GeneralPin;
 using tool::BoardPeriph;
 using tool::Console;
-using driver::ams::TCS3472;
 
 /* ****************************************************************************************
  * Extern
@@ -73,11 +72,11 @@ class Temp extends TimerTask{
  *
  */
 void setup(start::Entry& entry){  
-  board = new(entry.mStacker) BoardPeriph();
-  t[0] = new(entry.mStacker) Temp(1);
-  t[1] = new(entry.mStacker) Temp(2);
-  t[2] = new(entry.mStacker) Temp(3);
-  t[3] = new(entry.mStacker) Temp(4);
+  board = new BoardPeriph();
+  t[0] = new Temp(1);
+  t[1] = new Temp(2);
+  t[2] = new Temp(3);
+  t[3] = new Temp(4);
   Timer::scheduleAtFixedRate(*t[0], 500);
   Timer::scheduleAtFixedRate(*t[1], 250);
   Timer::scheduleAtFixedRate(*t[2], 750);

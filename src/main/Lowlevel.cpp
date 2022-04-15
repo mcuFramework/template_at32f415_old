@@ -8,7 +8,6 @@
 /* ****************************************************************************************
  * Include
  */  
-#include <stdio.h>
 
 //-----------------------------------------------------------------------------------------
 #include "mcuf.h"
@@ -24,43 +23,44 @@
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-using mcuf::lang::Thread;
+using arterytek::at32f415::Core;
+using arterytek::at32f415::CoreIomux;
+
+using tool::Console;
+
 using mcuf::lang::System;
-using mcuf::lang::String;
-using tool::BoardPeriph;
 
 /* ****************************************************************************************
  * Extern
  */
-extern void lowlevel(void);
-
-const char* TEXT = "+CIFSR:ETHIP,\"192.168.11.231\"\r\n+CIFSR:ETHMAC,\"8c:ce:4e:96:0a:2f\"\r\n\0";
-const char* FORMAT = "%*[^\"]%s %*[^\"]%s\"";
  
 /* ****************************************************************************************
  * Variable
  */
-BoardPeriph* boardPeriph;
-
+static Console* systemConsole;
+//UART4_TX    - PC10 / PF4
+//UART4_RX    - PC11 / PF5
 
 /* ****************************************************************************************
  * Method
  */
 
-void setup(Thread* _this){
-  boardPeriph = new BoardPeriph();
-}
+/**
+ *
+ */
+void lowlevel(void){
+  Core::iomux.init();
+  Core::gpioa.init();
+  Core::gpiob.init();
+  Core::gpioc.init();
+  Core::gpiod.init();
+  Core::gpiof.init();
+  Core::iomux.remapSWDIO(CoreIomux::MapSWDIO::JTAGDISABLE);
+  
+  systemConsole = new Console();
+  System::getRegister().setPrintStream(&systemConsole->out());
+}  
 
-void loop(Thread* _this){
-  String text = String(TEXT);
-	char ip[32];
-	char mac[32];
-  int result = text.scanFormat(FORMAT, &ip, &mac);
-  System::out().format("result = %d\nip = %s\nmac = %s\n", result, ip, mac); 
-  //System::out().println(text);
-  boardPeriph->led[0].setToggle();
-  _this->delay(500);
-}
  
 /* ****************************************************************************************
  * End of file

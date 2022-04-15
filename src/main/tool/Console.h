@@ -16,13 +16,7 @@
 #include "core_arterytek_at32f415.h"
 
 //-----------------------------------------------------------------------------------------
-#define TOOL_CONSOLE_DYNAMIC_SIZE ( \
-  sizeof(arterytek::at32f415::serial::CoreSerialPort) + 4 + \
-  sizeof(mcuf::io::SerialPortOutputStream) + 4 +\
-  sizeof(mcuf::io::OutputStreamBuffer) + 4 +\
-  sizeof(mcuf::io::PrintStream) + 4\
-  )
-  
+
 /* ****************************************************************************************
  * Namespace
  */  
@@ -53,11 +47,7 @@ class tool::Console extends mcuf::lang::Object{
     mcuf::io::OutputStreamBuffer* mOutputStreamBuffer;
     mcuf::io::PrintStream* mPrintStream;
   
-    uint32_t mDynamicMemory[TOOL_CONSOLE_DYNAMIC_SIZE / 4];
 
-    uint8_t mCoreSerialPortMemory[256];
-    uint8_t mPrintStreamMemory[256];
-    uint8_t mOutputStreamBufferMemory[1024];
 
   /* **************************************************************************************
    * Abstract method <Public>

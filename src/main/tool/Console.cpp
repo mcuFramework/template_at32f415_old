@@ -54,26 +54,16 @@ using mcuf::io::ByteBuffer;
  *
  */
 Console::Console(void){
-  Stacker stacker = Stacker(Memory(this->mDynamicMemory, sizeof(this->mDynamicMemory)));
-  
-  this->mCoreSerialPort = new(stacker) 
-    CoreSerialPort(CoreSerialPortReg::REG_UART4, Memory(this->mCoreSerialPortMemory, sizeof(this->mCoreSerialPortMemory)));
-  
+  this->mCoreSerialPort = new CoreSerialPort(CoreSerialPortReg::REG_UART4, 256);
   this->mCoreSerialPort->init();
-  
   this->mCoreSerialPort->baudrate(128000);
   
-  this->mSerialPortOutputStream = new(stacker)
-    SerialPortOutputStream(*this->mCoreSerialPort);
+  this->mSerialPortOutputStream = new SerialPortOutputStream(*this->mCoreSerialPort);
   
-  this->mOutputStreamBuffer = new(stacker)
-    OutputStreamBuffer(*this->mSerialPortOutputStream, Memory(this->mOutputStreamBufferMemory, sizeof(this->mOutputStreamBufferMemory)));
+  this->mOutputStreamBuffer = new OutputStreamBuffer(*this->mSerialPortOutputStream, 1024);
   
-  this->mPrintStream = new(stacker)
-    PrintStream(*this->mOutputStreamBuffer, Memory(this->mPrintStreamMemory, sizeof(this->mPrintStreamMemory)));
+  this->mPrintStream = new PrintStream(*this->mOutputStreamBuffer, 256);
   
-  Core::gpioc.init();
-  Core::iomux.remapSWDIO(CoreIomux::MapSWDIO::JTAGDISABLE);
   Core::gpioc.setFunction(10, false);
   return;
 }
@@ -84,10 +74,10 @@ Console::Console(void){
 Console::~Console(void){
   this->mCoreSerialPort->deinit();
   
-  this->mPrintStream->~PrintStream();
-  this->mOutputStreamBuffer->~OutputStreamBuffer();
-  this->mSerialPortOutputStream->~SerialPortOutputStream();
-  this->mCoreSerialPort->~CoreSerialPort();
+  delete this->mPrintStream;
+  delete this->mOutputStreamBuffer;
+  delete this->mSerialPortOutputStream;
+  delete this->mCoreSerialPort;
   
   return;
 }

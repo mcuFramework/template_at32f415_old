@@ -188,7 +188,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -336,7 +336,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>AT32F415RBT7</Define>
               <Undefine></Undefine>
               <IncludePath>.\ref\mcuf\src\main;.\ref\core_arterytek_at32f415\src\main;.\ref\bsp_arterytek_at32f415\src\main;.\ref\driver\src\main;.\src\main;.\src\resource</IncludePath>
             </VariousControls>
@@ -386,6 +386,11 @@
               <FileName>Main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\main\Main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Lowlevel.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\main\Lowlevel.cpp</FilePath>
             </File>
           </Files>
         </Group>

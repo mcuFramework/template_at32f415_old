@@ -44,7 +44,7 @@ using hal::general::GeneralPinMode;
 /**
  *
  */
-BoardPeriph::BoardPeriph(void) construct 
+BoardPeriph::BoardPeriph(void) : 
   led{CoreGeneralPin(&Core::gpiob, 0), 
       CoreGeneralPin(&Core::gpiob, 1),
       CoreGeneralPin(&Core::gpiob, 2),
@@ -53,14 +53,6 @@ BoardPeriph::BoardPeriph(void) construct
       CoreGeneralPin(&Core::gpiob, 5)},
   wakeup(&Core::gpioa, 0),
   function(&Core::gpioa, 1){
-    
-  Core::gpioa.init();
-  Core::gpiob.init();
-  Core::gpioc.init();
-  Core::gpiod.init();
-  Core::gpiof.init();
-  Core::iomux.init();
-  Core::iomux.remapSWDIO(CoreIomux::MapSWDIO::JTAGDISABLE);
   
   for(int i=0; i<8; i++){
     this->led[i].setOutput();

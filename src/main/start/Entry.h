@@ -62,7 +62,7 @@ class start::Entry extends mcuf::lang::Thread{
     /**
      *
      */
-    virtual ~Entry(void) = default;
+    virtual ~Entry(void);
 
   /* **************************************************************************************
    * Operator Method

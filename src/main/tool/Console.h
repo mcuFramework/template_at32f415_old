@@ -42,11 +42,13 @@ class tool::Console extends mcuf::lang::Object{
    * Variable <Private>
    */
   public:
-    arterytek::at32f415::serial::CoreSerialPort* mCoreSerialPort;
-    mcuf::io::SerialPortOutputStream* mSerialPortOutputStream;
-    mcuf::io::OutputStreamBuffer* mOutputStreamBuffer;
-    mcuf::io::PrintStream* mPrintStream;
-  
+    arterytek::at32f415::serial::CoreSerialPort mCoreSerialPort;
+    mcuf::io::SerialPortOutputStream mSerialPortOutputStream;
+    mcuf::io::OutputStreamBuffer mOutputStreamBuffer;
+    mcuf::io::PrintStream mPrintStream;
+    uint8_t mCoreSerialPortMemory[256];
+    uint8_t mPrintStreamMemory[256];
+    uint8_t mOutputStreamBufferMemory[1024];
 
 
   /* **************************************************************************************
@@ -97,7 +99,7 @@ class tool::Console extends mcuf::lang::Object{
      * @return mcuf::io::PrintStream& 
      */
     inline mcuf::io::PrintStream& out(void){
-      return *this->mPrintStream;
+      return this->mPrintStream;
     }
 
   /* **************************************************************************************

@@ -27,39 +27,50 @@
 using mcuf::lang::Thread;
 using mcuf::lang::System;
 using mcuf::lang::String;
+using mcuf::lang::Memory;
+using mcuf::io::ByteBuffer;
 using tool::BoardPeriph;
+using arterytek::at32f415::Core;
+using arterytek::at32f415::serial::CoreSerialPort;
+using arterytek::at32f415::serial::CoreSerialPortReg;
+using driver::wirelesstag::WT32ETH01;
+
 
 /* ****************************************************************************************
  * Extern
  */
 extern void lowlevel(void);
+extern "C" void core_at32f415_interrupt_priority(void);
 
-const char* TEXT = "+CIFSR:ETHIP,\"192.168.11.231\"\r\n+CIFSR:ETHMAC,\"8c:ce:4e:96:0a:2f\"\r\n\0";
-const char* FORMAT = "%*[^\"]%s %*[^\"]%s\"";
  
 /* ****************************************************************************************
  * Variable
  */
+uint8_t recBuf[256];
 BoardPeriph* boardPeriph;
-
-
+CoreSerialPort testSerialPort = CoreSerialPort(CoreSerialPortReg::REG_UART5, Memory(recBuf, sizeof(recBuf)));
+WT32ETH01* eth01;
 /* ****************************************************************************************
  * Method
  */
 
+extern "C" void HardFault_Handler(void){
+  return;
+}
+
 void setup(Thread* _this){
+  core_at32f415_interrupt_priority();
   boardPeriph = new BoardPeriph();
+  Core::gpioc.setFunction(12, false);
+  testSerialPort.init();
+  testSerialPort.baudrate(115200);
+  eth01 = new WT32ETH01(testSerialPort, boardPeriph->led[1]);
+  eth01->init();
 }
 
 void loop(Thread* _this){
-  String text = String(TEXT);
-	char ip[32];
-	char mac[32];
-  int result = text.scanFormat(FORMAT, &ip, &mac);
-  System::out().format("result = %d\nip = %s\nmac = %s\n", result, ip, mac); 
-  //System::out().println(text);
   boardPeriph->led[0].setToggle();
-  _this->delay(500);
+  _this->delay(1000);
 }
  
 /* ****************************************************************************************

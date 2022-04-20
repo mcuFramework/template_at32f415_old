@@ -81,7 +81,7 @@ const nvic_priority_level_t nvic_priority_level[] = {
   {SDIO1_IRQn,              15},
   {TMR5_GLOBAL_IRQn,        15},
   {UART4_IRQn,              15},
-  {UART5_IRQn,              15},
+  {UART5_IRQn,              0},
   {DMA2_Channel1_IRQn,      15},
   {DMA2_Channel2_IRQn,      15},
   {DMA2_Channel3_IRQn,      15},

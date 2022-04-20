@@ -53,16 +53,14 @@ using mcuf::io::ByteBuffer;
 /**
  *
  */
-Console::Console(void){
-  this->mCoreSerialPort = new CoreSerialPort(CoreSerialPortReg::REG_UART4, 256);
-  this->mCoreSerialPort->init();
-  this->mCoreSerialPort->baudrate(128000);
-  
-  this->mSerialPortOutputStream = new SerialPortOutputStream(*this->mCoreSerialPort);
-  
-  this->mOutputStreamBuffer = new OutputStreamBuffer(*this->mSerialPortOutputStream, 1024);
-  
-  this->mPrintStream = new PrintStream(*this->mOutputStreamBuffer, 256);
+Console::Console(void) : 
+mCoreSerialPort(CoreSerialPortReg::REG_UART4, Memory(this->mCoreSerialPortMemory, sizeof(this->mCoreSerialPortMemory))),
+mSerialPortOutputStream(this->mCoreSerialPort),
+mOutputStreamBuffer(this->mSerialPortOutputStream, Memory(this->mOutputStreamBufferMemory, sizeof(this->mOutputStreamBufferMemory))),
+mPrintStream(this->mOutputStreamBuffer, Memory(this->mPrintStreamMemory, sizeof(this->mPrintStreamMemory))){
+
+  this->mCoreSerialPort.init();
+  this->mCoreSerialPort.baudrate(128000);
   
   Core::gpioc.setFunction(10, false);
   return;
@@ -72,13 +70,7 @@ Console::Console(void){
  *
  */
 Console::~Console(void){
-  this->mCoreSerialPort->deinit();
-  
-  delete this->mPrintStream;
-  delete this->mOutputStreamBuffer;
-  delete this->mSerialPortOutputStream;
-  delete this->mCoreSerialPort;
-  
+  this->mCoreSerialPort.deinit();
   return;
 }
 

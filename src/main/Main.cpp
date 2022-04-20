@@ -22,18 +22,20 @@
  */  
  
 //-----------------------------------------------------------------------------------------
+using namespace mcuf::io;
 
 //-----------------------------------------------------------------------------------------
 using mcuf::lang::Thread;
 using mcuf::lang::System;
 using mcuf::lang::String;
 using mcuf::lang::Memory;
-using mcuf::io::ByteBuffer;
+
 using tool::BoardPeriph;
 using arterytek::at32f415::Core;
 using arterytek::at32f415::serial::CoreSerialPort;
 using arterytek::at32f415::serial::CoreSerialPortReg;
 using driver::wirelesstag::WT32ETH01;
+using mcuf::net::InternetProtocolAddress;
 
 
 /* ****************************************************************************************
@@ -50,6 +52,7 @@ uint8_t recBuf[256];
 BoardPeriph* boardPeriph;
 CoreSerialPort testSerialPort = CoreSerialPort(CoreSerialPortReg::REG_UART5, Memory(recBuf, sizeof(recBuf)));
 WT32ETH01* eth01;
+Future future;
 /* ****************************************************************************************
  * Method
  */
@@ -65,12 +68,46 @@ void setup(Thread* _this){
   testSerialPort.init();
   testSerialPort.baudrate(115200);
   eth01 = new WT32ETH01(testSerialPort, boardPeriph->led[1]);
+  /*
+  eth01->setStaticIPAddress(InternetProtocolAddress("192.168.0.229"), 
+                            InternetProtocolAddress("192.168.0.1"), 
+                            InternetProtocolAddress("255.255.0.0"));
+  */
   eth01->init();
+  _this->delay(1000);
 }
 
 void loop(Thread* _this){
   boardPeriph->led[0].setToggle();
-  _this->delay(1000);
+  future.clear();
+  if(eth01->listen(WT32ETH01::ConnectType::TCP, 8888, future) == false){
+    System::out().print("wait module standby\n");
+    _this->delay(1000);
+    return;
+  }
+  future.waitDone();
+  
+  if(future.isFailed()){
+    System::out().print("listern fail\n");
+    _this->delay(1000);
+    return;
+  }
+  
+  System::out().print("listern completed\n");
+  
+  while(true){
+    if(!eth01->isConnect()){
+      System::out().print("disconnect\n");
+      break;
+    }
+    if(eth01->avariable() != 0){
+      System::out().print("receiver:");
+      System::out().println(*eth01);
+    }
+    boardPeriph->led[0].setToggle();
+    _this->delay(1000);
+  }
+  
 }
  
 /* ****************************************************************************************

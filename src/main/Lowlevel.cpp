@@ -59,6 +59,7 @@ void lowlevel(void){
   
   systemConsole = new Console();
   System::getRegister().setPrintStream(&systemConsole->out());
+  System::getRegister().setInputStream(&systemConsole->in());
 }  
 
  

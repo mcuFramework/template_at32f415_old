@@ -53,6 +53,9 @@ BoardPeriph* boardPeriph;
 CoreSerialPort testSerialPort = CoreSerialPort(CoreSerialPortReg::REG_UART5, Memory(recBuf, sizeof(recBuf)));
 WT32ETH01* eth01;
 Future future;
+Future futureTrc;
+ByteBuffer recCache = ByteBuffer(128);
+ByteBuffer trcCache = ByteBuffer(128);
 /* ****************************************************************************************
  * Method
  */
@@ -68,24 +71,34 @@ void setup(Thread* _this){
   testSerialPort.init();
   testSerialPort.baudrate(115200);
   eth01 = new WT32ETH01(testSerialPort, boardPeriph->led[1]);
-  /*
-  eth01->setStaticIPAddress(InternetProtocolAddress("192.168.0.229"), 
-                            InternetProtocolAddress("192.168.0.1"), 
-                            InternetProtocolAddress("255.255.0.0"));
-  */
+  
+  
   eth01->init();
   _this->delay(1000);
 }
 
 void loop(Thread* _this){
   boardPeriph->led[0].setToggle();
+  
+  while(true){
+    _this->delay(200);
+    if(System::in().avariable()){
+      System::out().print("receiver:");
+      System::out().println(System::in());
+    }
+    boardPeriph->led[0].setToggle();
+  }
+  
   future.clear();
   if(eth01->listen(WT32ETH01::ConnectType::TCP, 8888, future) == false){
     System::out().print("wait module standby\n");
     _this->delay(1000);
     return;
   }
+  
+  
   future.waitDone();
+  System::out().println(eth01->getIP().toString());
   
   if(future.isFailed()){
     System::out().print("listern fail\n");
@@ -100,10 +113,14 @@ void loop(Thread* _this){
       System::out().print("disconnect\n");
       break;
     }
+    
+    
     if(eth01->avariable() != 0){
       System::out().print("receiver:");
       System::out().println(*eth01);
     }
+    
+    
     boardPeriph->led[0].setToggle();
     _this->delay(1000);
   }

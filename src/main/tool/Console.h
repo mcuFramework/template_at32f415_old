@@ -44,6 +44,7 @@ class tool::Console extends mcuf::lang::Object{
   public:
     arterytek::at32f415::serial::CoreSerialPort mCoreSerialPort;
     mcuf::io::SerialPortOutputStream mSerialPortOutputStream;
+    mcuf::io::SerialPortInputStream mSerialPortInputStream;
     mcuf::io::OutputStreamBuffer mOutputStreamBuffer;
     mcuf::io::PrintStream mPrintStream;
     uint8_t mCoreSerialPortMemory[256];
@@ -100,6 +101,15 @@ class tool::Console extends mcuf::lang::Object{
      */
     inline mcuf::io::PrintStream& out(void){
       return this->mPrintStream;
+    }
+    
+    /**
+     * @brief 
+     * 
+     * @return mcuf::io::InputStream& 
+     */
+    inline mcuf::io::InputStream& in(void){
+      return this->mSerialPortInputStream;
     }
 
   /* **************************************************************************************

@@ -56,6 +56,7 @@ using mcuf::io::ByteBuffer;
 Console::Console(void) : 
 mCoreSerialPort(CoreSerialPortReg::REG_UART4, Memory(this->mCoreSerialPortMemory, sizeof(this->mCoreSerialPortMemory))),
 mSerialPortOutputStream(this->mCoreSerialPort),
+mSerialPortInputStream(this->mCoreSerialPort),
 mOutputStreamBuffer(this->mSerialPortOutputStream, Memory(this->mOutputStreamBufferMemory, sizeof(this->mOutputStreamBufferMemory))),
 mPrintStream(this->mOutputStreamBuffer, Memory(this->mPrintStreamMemory, sizeof(this->mPrintStreamMemory))){
 

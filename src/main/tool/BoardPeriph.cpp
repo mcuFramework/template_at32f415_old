@@ -50,7 +50,9 @@ BoardPeriph::BoardPeriph(void) :
       CoreGeneralPin(&Core::gpiob, 2),
       CoreGeneralPin(&Core::gpiob, 3),
       CoreGeneralPin(&Core::gpiob, 4),
-      CoreGeneralPin(&Core::gpiob, 5)},
+      CoreGeneralPin(&Core::gpiob, 5),
+      CoreGeneralPin(&Core::gpiob, 6),
+      CoreGeneralPin(&Core::gpiob, 7)},
   wakeup(&Core::gpioa, 0),
   function(&Core::gpioa, 1){
   

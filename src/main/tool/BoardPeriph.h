@@ -34,7 +34,7 @@ class tool::BoardPeriph extends mcuf::lang::Object{
    * Variable <Public>
    */
   public:
-    arterytek::at32f415::general::CoreGeneralPin led[6];
+    arterytek::at32f415::general::CoreGeneralPin led[8];
     arterytek::at32f415::general::CoreGeneralPin wakeup;
     arterytek::at32f415::general::CoreGeneralPin function;
 

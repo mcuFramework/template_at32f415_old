@@ -37,8 +37,7 @@ using arterytek::at32f415::serial::CoreSerialPortReg;
 using mcuf::util::Stacker;
 using mcuf::lang::Memory;
 
-using mcuf::io::SerialPortOutputStream;
-using mcuf::io::OutputStreamBuffer;
+using mcuf::io::OutputStreamHandler;
 using mcuf::io::PrintStream;
 using mcuf::io::ByteBuffer;
 
@@ -55,10 +54,8 @@ using mcuf::io::ByteBuffer;
  */
 Console::Console(void) : 
 mCoreSerialPort(CoreSerialPortReg::REG_UART4, Memory(this->mCoreSerialPortMemory, sizeof(this->mCoreSerialPortMemory))),
-mSerialPortOutputStream(this->mCoreSerialPort),
-mSerialPortInputStream(this->mCoreSerialPort),
-mOutputStreamBuffer(this->mSerialPortOutputStream, Memory(this->mOutputStreamBufferMemory, sizeof(this->mOutputStreamBufferMemory))),
-mPrintStream(this->mOutputStreamBuffer, Memory(this->mPrintStreamMemory, sizeof(this->mPrintStreamMemory))){
+mOutputStreamHandler(this->mCoreSerialPort, Memory(this->mOutputStreamHandlerMemory, sizeof(this->mOutputStreamHandlerMemory))),
+mPrintStream(this->mOutputStreamHandler, Memory(this->mPrintStreamMemory, sizeof(this->mPrintStreamMemory))){
 
   this->mCoreSerialPort.init();
   this->mCoreSerialPort.baudrate(128000);

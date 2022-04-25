@@ -67,6 +67,7 @@ extern "C" void HardFault_Handler(void){
 void setup(Thread* _this){
   core_at32f415_interrupt_priority();
   boardPeriph = new BoardPeriph();
+  /*
   Core::gpioc.setFunction(12, false);
   testSerialPort.init();
   testSerialPort.baudrate(115200);
@@ -75,20 +76,23 @@ void setup(Thread* _this){
   
   eth01->init();
   _this->delay(1000);
+  */
 }
 
 void loop(Thread* _this){
-  boardPeriph->led[0].setToggle();
-  
-  while(true){
-    _this->delay(200);
-    if(System::in().avariable()){
-      System::out().print("receiver:");
-      System::out().println(System::in());
-    }
-    boardPeriph->led[0].setToggle();
+  for(int i=0; i<8; ++i){
+    _this->delay(250);
+    boardPeriph->led[i].setHigh();
   }
   
+  _this->delay(2000);
+  
+  for(int i=0; i<8; ++i){
+    boardPeriph->led[i].setLow();
+  }
+  
+  
+  /**
   future.clear();
   if(eth01->listen(WT32ETH01::ConnectType::TCP, 8888, future) == false){
     System::out().print("wait module standby\n");
@@ -114,16 +118,22 @@ void loop(Thread* _this){
       break;
     }
     
-    
     if(eth01->avariable() != 0){
       System::out().print("receiver:");
       System::out().println(*eth01);
+    }
+    
+    if(System::in().avariable() > 0){
+      Future f = Future();
+      eth01->write(System::in(), f);
+      f.waitDone();
     }
     
     
     boardPeriph->led[0].setToggle();
     _this->delay(1000);
   }
+  */
   
 }
  

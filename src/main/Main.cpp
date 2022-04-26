@@ -23,6 +23,7 @@
  
 //-----------------------------------------------------------------------------------------
 using namespace mcuf::io;
+using namespace arterytek::at32f415::serial;
 
 //-----------------------------------------------------------------------------------------
 using mcuf::lang::Thread;
@@ -32,9 +33,8 @@ using mcuf::lang::Memory;
 
 using tool::BoardPeriph;
 using arterytek::at32f415::Core;
-using arterytek::at32f415::serial::CoreSerialPort;
-using arterytek::at32f415::serial::CoreSerialPortReg;
 using driver::wirelesstag::WT32ETH01;
+using driver::ams::TCS3472;
 using mcuf::net::InternetProtocolAddress;
 
 
@@ -56,6 +56,9 @@ Future future;
 Future futureTrc;
 ByteBuffer recCache = ByteBuffer(128);
 ByteBuffer trcCache = ByteBuffer(128);
+CoreSerialBus* coreSerialBus;
+TCS3472 *tcs3472;
+
 /* ****************************************************************************************
  * Method
  */
@@ -67,6 +70,7 @@ extern "C" void HardFault_Handler(void){
 void setup(Thread* _this){
   core_at32f415_interrupt_priority();
   boardPeriph = new BoardPeriph();
+  
   /*
   Core::gpioc.setFunction(12, false);
   testSerialPort.init();
@@ -77,22 +81,22 @@ void setup(Thread* _this){
   eth01->init();
   _this->delay(1000);
   */
+  
+  Core::gpiob.setFunction(6, true);
+  Core::gpiob.setFunction(7, true);
+  coreSerialBus = new CoreSerialBus(CoreSerialBusReg::REG_IIC1);
+  coreSerialBus->init();
+  tcs3472 = new TCS3472(TCS3472::Type::TCS34725, *coreSerialBus);
+  tcs3472->enable();
 }
 
 void loop(Thread* _this){
-  for(int i=0; i<8; ++i){
-    _this->delay(250);
-    boardPeriph->led[i].setHigh();
-  }
+  tcs3472->read();
+  _this->delay(1000);
+  System::out().format("Red:%4d Green:%4d Blue:%4d\n", tcs3472->mRegister.RED, tcs3472->mRegister.GREEN, tcs3472->mRegister.BLUE);
+  boardPeriph->led[0].setToggle();
+  /*
   
-  _this->delay(2000);
-  
-  for(int i=0; i<8; ++i){
-    boardPeriph->led[i].setLow();
-  }
-  
-  
-  /**
   future.clear();
   if(eth01->listen(WT32ETH01::ConnectType::TCP, 8888, future) == false){
     System::out().print("wait module standby\n");
@@ -133,8 +137,8 @@ void loop(Thread* _this){
     boardPeriph->led[0].setToggle();
     _this->delay(1000);
   }
-  */
   
+  */
 }
  
 /* ****************************************************************************************

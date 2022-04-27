@@ -335,7 +335,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>-fexceptions -frtti</MiscControls>
               <Define>AT32F415RBT7</Define>
               <Undefine></Undefine>
               <IncludePath>.\ref\mcuf\src\main;.\ref\core_arterytek_at32f415\src\main;.\ref\bsp_arterytek_at32f415\src\main;.\ref\driver\src\main;.\src\main;.\src\resource</IncludePath>

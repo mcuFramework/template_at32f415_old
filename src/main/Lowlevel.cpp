@@ -129,6 +129,8 @@ bool errorCodeHandler(const void* address, ErrorCode code){
  *
  */
 void lowlevel(void){
+  System::initialize();
+  
   Core::iomux.init();
   Core::gpioa.init();
   Core::gpiob.init();

@@ -122,13 +122,14 @@ bool errorCodeHandler(const void* address, ErrorCode code){
       break;
   }
   
-  return false;
+  return true;
 }
 
 /**
  *
  */
 void lowlevel(void){
+  arterytek::at32f415::Core::setSystemCoreClock(144);
   System::initialize();
   
   Core::iomux.init();

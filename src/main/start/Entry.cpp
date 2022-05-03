@@ -39,7 +39,6 @@ extern void lowlevel(void);
 
 
 extern "C" int main(void){
-  arterytek::at32f415::Core::setSystemCoreClock(144);
   lowlevel();
   Entry entry = Entry(1024);
   mcuf::lang::System::start(entry);

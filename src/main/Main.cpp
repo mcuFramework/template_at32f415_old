@@ -26,6 +26,7 @@ using namespace mcuf::io;
 using namespace mcuf::lang;
 using namespace mcuf::function;
 using namespace arterytek::at32f415::serial;
+using namespace arterytek::at32f415::usb;
 
 //-----------------------------------------------------------------------------------------
 using mcuf::lang::Thread;
@@ -50,13 +51,9 @@ extern "C" void core_at32f415_interrupt_priority(void);
 /* ****************************************************************************************
  * Variable
  */
-uint8_t recBuf[256];
 BoardPeriph* boardPeriph;
-CoreSerialPort testSerialPort = CoreSerialPort(CoreSerialPortReg::REG_UART5, Memory(recBuf, sizeof(recBuf)));
-WT32ETH01* eth01;
+CoreHumanInterfaceDevices *hid;
 Future future;
-
-
 /* ****************************************************************************************
  * Method
  */
@@ -66,65 +63,27 @@ extern "C" void HardFault_Handler(void){
   }
 }
 
-void clearAllLed(void){
-  for(int i=0; i<7; ++i){
-    boardPeriph->led[i].setLow();
-  }
-}
+
 
 void setup(Thread* _this){
   core_at32f415_interrupt_priority();
   boardPeriph = new BoardPeriph();
-  Core::gpioc.setFunction(12, false);
-  testSerialPort.init();
-  testSerialPort.baudrate(115200);
-  eth01 = new WT32ETH01(testSerialPort, boardPeriph->led[7]);
-  /*
-  eth01->setStaticIPAddress(InternetProtocolAddress("192.168.0.229"), 
-                            InternetProtocolAddress("192.168.0.1"), 
-                            InternetProtocolAddress("255.255.0.0"));
-  */
-  eth01->init();
-  _this->delay(1000);
+  hid = new CoreHumanInterfaceDevices(1024);
+  hid->init();
 }
 
 void loop(Thread* _this){
-  clearAllLed();
-  boardPeriph->led[0].setHigh();
-  future.clear();
-  if(eth01->listen(WT32ETH01::ConnectType::TCP, 8888, future) == false){
-    boardPeriph->led[2].setHigh();
-    _this->delay(1000);
-    return;
-  }
-  future.waitDone();
+  boardPeriph->led[0].setToggle();
+  _this->delay(100);
   
-  if(future.isFailed()){
-    boardPeriph->led[1].setHigh();
-    _this->delay(1000);
-    return;
+  if(System::in().avariable()){
+    future.clear();
+    hid->write(System::in(), future);
+    future.waitDone();
   }
   
-  boardPeriph->led[3].setHigh();
-  
-  while(true){
-    if(!eth01->isConnect()){
-      break;
-      
-    }else if(eth01->avariable() != 0){
-      boardPeriph->led[5].setToggle();
-      System::out().print(*eth01);
-      
-    }else if(System::in().avariable() != 0){
-      boardPeriph->led[4].setToggle();
-      future.clear();
-      eth01->write(System::in(), future);
-      future.waitDone();
-      
-    }else{
-      boardPeriph->led[6].setToggle();
-      _this->delay(1000);
-    }
+  if(hid->avariable()){
+    System::out().print(*hid);
   }
 }
  
